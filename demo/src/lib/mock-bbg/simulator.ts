@@ -119,3 +119,106 @@ export function snapshot(security: string): Tick | null {
     CHANGE_PCT: round(((s.last - s.meta.open) / s.meta.open) * 100, 3),
   };
 }
+
+/* ------------------------------------------------------------------ *
+ * Daily (end-of-day) history
+ *
+ * The intraday random walk above only exists while the server runs, so it
+ * cannot answer "how did each name do yesterday?". We back that with a
+ * deterministic daily series seeded by (security, date) so the previous day's
+ * close is stable across restarts and cloud runs, and so that yesterday's
+ * close lines up with today's open (meta.open).
+ * ------------------------------------------------------------------ */
+
+function hashSeed(str: string): number {
+  let h = 2166136261;
+  for (let i = 0; i < str.length; i++) {
+    h ^= str.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+
+function mulberry32(seed: number): () => number {
+  let a = seed;
+  return () => {
+    a |= 0;
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function gaussianFrom(rng: () => number): number {
+  let u = 0;
+  let v = 0;
+  while (u === 0) u = rng();
+  while (v === 0) v = rng();
+  return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+}
+
+function toDateStr(d: Date): string {
+  return d.toISOString().slice(0, 10); // YYYY-MM-DD
+}
+
+/** Most recent weekday strictly before `from` (skips Sat/Sun). */
+function previousTradingDate(from: Date): Date {
+  const d = new Date(from);
+  d.setUTCDate(d.getUTCDate() - 1);
+  while (d.getUTCDay() === 0 || d.getUTCDay() === 6) {
+    d.setUTCDate(d.getUTCDate() - 1);
+  }
+  return d;
+}
+
+/** The seeded daily return (fractional) for a security on a given date. */
+function dailyReturn(security: string, dateStr: string): number {
+  const rng = mulberry32(hashSeed(`${security}|${dateStr}`));
+  // ~1.5% daily volatility, clamped to a sane band.
+  const r = gaussianFrom(rng) * 0.015;
+  return Math.max(-0.09, Math.min(0.09, r));
+}
+
+export interface DayMover {
+  security: string;
+  name: string;
+  sector: string;
+  date: string;
+  prevClose: number;
+  priorClose: number;
+  changeAbs: number;
+  changePct: number;
+}
+
+/**
+ * Previous trading day performance for every security.
+ * `prevClose` is anchored to today's open (today opens at yesterday's close),
+ * and `changePct` is the seeded return realised on the previous trading day.
+ */
+export function previousDayMovers(asOf: Date = new Date()): {
+  date: string;
+  rows: DayMover[];
+} {
+  const prevDate = previousTradingDate(asOf);
+  const dateStr = toDateStr(prevDate);
+
+  const rows: DayMover[] = SECURITIES.map((meta) => {
+    const r = dailyReturn(meta.security, dateStr);
+    const prevClose = meta.open;
+    const priorClose = prevClose / (1 + r);
+    return {
+      security: meta.security,
+      name: meta.name,
+      sector: meta.sector,
+      date: dateStr,
+      prevClose: round(prevClose, 2),
+      priorClose: round(priorClose, 2),
+      changeAbs: round(prevClose - priorClose, 2),
+      changePct: round(r * 100, 2),
+    };
+  });
+
+  rows.sort((a, b) => b.changePct - a.changePct);
+  return { date: dateStr, rows };
+}

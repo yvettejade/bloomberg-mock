@@ -38,3 +38,21 @@ export interface HistoryPoint {
   volume: number;
   changePct: number;
 }
+
+export interface DayMover {
+  security: string;
+  name: string;
+  sector: string;
+  date: string;
+  prevClose: number;
+  priorClose: number;
+  changeAbs: number;
+  changePct: number;
+}
+
+export interface MoversResponse {
+  date: string;
+  winners: DayMover[];
+  losers: DayMover[];
+  all: DayMover[];
+}

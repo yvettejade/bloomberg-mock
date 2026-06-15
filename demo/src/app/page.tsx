@@ -6,6 +6,7 @@ import { Header } from "@/components/Header";
 import { TickerGrid } from "@/components/TickerGrid";
 import { PriceChart } from "@/components/PriceChart";
 import { ReportPanel } from "@/components/ReportPanel";
+import { MoversPanel } from "@/components/MoversPanel";
 
 export default function Dashboard() {
   const { ticks, status, lastUpdate } = useMarketStream();
@@ -42,6 +43,8 @@ export default function Dashboard() {
             liveTick={selected ? ticks[selected] : undefined}
           />
         </div>
+
+        <MoversPanel />
 
         <ReportPanel />
       </main>
