@@ -30,3 +30,13 @@ that consumes the existing backend. Do not modify `src/app/api/**` or
 - Live ticks via SSE (not full-page polling); reports panel may poll on an interval.
 - Use the theme tokens already in `globals.css` (`--panel`, `--up`, `--down`, `--accent`).
 - Responsive down to one column; `npm run build` passes with no type/lint errors.
+
+## Verification (avoid hanging the terminal)
+
+`/api/stream` is an SSE endpoint — an infinite response that never ends on its
+own. Never verify with a blocking request or a foreground dev server.
+
+- Static check: `npm run build` (completes and exits).
+- If hitting the stream, always bound it: `curl --max-time 3 http://localhost:3000/api/stream`.
+- Don't run `npm run dev` in the foreground to verify — reuse the already-running
+  server or start it in the background.
