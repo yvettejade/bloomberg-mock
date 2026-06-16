@@ -1,9 +1,8 @@
 ---
 description: Conventions for the Next.js demo app under demo/
-globs: demo/**/*.{ts,tsx}
+globs: demo/**/*.{ts}
 alwaysApply: false
 ---
-
 # Next.js Demo Conventions
 
 - API route handlers that touch SQLite or the engine must opt out of static
