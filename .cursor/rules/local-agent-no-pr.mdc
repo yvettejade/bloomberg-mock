@@ -1,12 +1,17 @@
 ---
-description: Local agent behavior — do not open a PR when done
+description: Never open a pull request unless the user explicitly asks
 alwaysApply: true
 ---
 
-# Local Agent: No Auto PR
+# Do Not Create Pull Requests
 
-When a local agent finishes a task, it should **not** create a pull request.
+Never create a pull request on your own. This is a hard rule.
 
-- Leave the changes in the working tree (and commit only if explicitly asked).
-- Do not run `gh pr create` or push a branch to open a PR unless the user
-  explicitly requests it.
+- Do **not** run `gh pr create` (or any `gh pr ...` / git push that opens a PR).
+- Do **not** push a branch for the purpose of opening a PR.
+- Finishing a task, fixing CI, or "wrapping up" is **not** a request to open a PR.
+- Only create or push a PR when the user explicitly asks for it **in their
+  current message** (e.g. "open a PR", "create the pull request").
+
+When done, leave the changes in the working tree and summarize them. Commit
+only if explicitly asked.
