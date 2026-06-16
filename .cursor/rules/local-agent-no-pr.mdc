@@ -1,0 +1,12 @@
+---
+description: Local agent behavior — do not open a PR when done
+alwaysApply: true
+---
+
+# Local Agent: No Auto PR
+
+When a local agent finishes a task, it should **not** create a pull request.
+
+- Leave the changes in the working tree (and commit only if explicitly asked).
+- Do not run `gh pr create` or push a branch to open a PR unless the user
+  explicitly requests it.
