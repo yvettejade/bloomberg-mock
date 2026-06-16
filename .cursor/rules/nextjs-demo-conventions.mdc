@@ -1,0 +1,23 @@
+---
+description: Conventions for the Next.js demo app under demo/
+globs: demo/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# Next.js Demo Conventions
+
+- API route handlers that touch SQLite or the engine must opt out of static
+  optimization:
+
+```ts
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+```
+
+- Native / Node-only packages (`better-sqlite3`, `node-cron`) are declared in
+  `serverExternalPackages` in `next.config.ts`. Don't import them into client
+  components.
+- Server singletons (market engine, reporting state) live on `globalThis` so
+  dev hot-reload doesn't spin up duplicates — follow that pattern for new ones.
+- When building the dashboard, consume the existing API routes; do **not** edit
+  files under `src/app/api/**` or `src/lib/server/**`.

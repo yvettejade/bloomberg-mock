@@ -1,0 +1,20 @@
+---
+description: Overview of the Bloomberg mock demo repo and where things live
+alwaysApply: true
+---
+
+# Bloomberg Mock Demo
+
+This repo demos building on Bloomberg market data without a real terminal.
+
+- `examples/`, `tester-app/` — upstream InteropIO `@glue42/bbg-market-data` samples (reference only).
+- `demo/` — the live demo: a Next.js + TypeScript app.
+  - `src/lib/mock-bbg/` — mock of `@glue42/bbg-market-data` (factory, request types, synthetic feed). Swap the import for the real package to talk to a live terminal.
+  - `src/lib/server/` — market engine, SQLite layer (`better-sqlite3`), reporting job (`node-cron`).
+  - `src/app/api/**` — backend routes (`securities`, `stream`, `history`, `reports`, `reports/run`, `movers`).
+
+## Conventions
+
+- The dashboard UI is intentionally built live during demos; the baseline state is **backend only**.
+- To reset between demos, run `demo/refresh-demo.sh`.
+- This is mock/synthetic data — never present it as real market data.
