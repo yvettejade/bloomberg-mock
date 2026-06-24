@@ -1,0 +1,40 @@
+---
+description: High-density dark-mode design standards for the financial dashboard UI
+globs: demo/src/**/*.tsx,demo/src/**/*.ts,demo/src/**/*.css
+alwaysApply: false
+---
+
+# Dashboard Design
+
+The dashboard is a high-density, terminal-style financial surface. Optimize for information density and instant scannability — not whitespace.
+
+## Surfaces (dark mode only)
+
+- Page backdrop: `#0B0E14`. Panels/cards: `#161B26`. Borders/dividers: a subtle step lighter (e.g. `#222838`).
+- **Never** use a pure-black (`#000`) or pure-white (`#fff` / `#FFFFFF`) backdrop. Primary text should be off-white (e.g. `#E6E9EF`), secondary text muted gray (e.g. `#8A93A6`).
+
+## Numbers & typography
+
+- All numeric values (prices, P&L, AUM, ratios, %) MUST use a monospaced font with **tabular, lining figures** so digits align in columns:
+
+```css
+font-variant-numeric: tabular-nums lining-nums;
+font-family: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
+```
+
+- Right-align numeric table columns. Keep labels left-aligned.
+
+## Financial accent colors
+
+- Gains / positive: green `#16C784`. Losses / negative: red `#EA3943`. Use them for value deltas, P&L, and directional indicators — not for decoration.
+- Neutral/info accent: blue `#4C82FB`. Warnings/elevated risk: amber `#F0A92E`.
+- Color must reinforce meaning (sign, risk score), never be the only signal — pair with `+/-`, arrows, or labels.
+
+## Layout & density
+
+- Prefer compact grids and tight row heights; group related metrics into labeled panels.
+
+## Charts
+
+- Every chart MUST be labeled: a title, axis labels (or explicit units), and a legend when more than one series is shown.
+- **Forbid unlabeled charts.** A chart with no title/units/legend is not acceptable.
