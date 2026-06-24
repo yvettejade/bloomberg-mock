@@ -1,0 +1,11 @@
+{
+  "name": "bloomberg-mock",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "predev": "npm --prefix demo install --no-audit --no-fund",
+    "dev": "npm --prefix demo run dev",
+    "build": "npm --prefix demo run build",
+    "lint": "npm --prefix demo run lint"
+  }
+}
