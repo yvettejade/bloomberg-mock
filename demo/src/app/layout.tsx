@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "BBG Terminal — Market Dashboard",
+  title: "BBG Terminal — Institutional Portfolio",
   description:
-    "Live market-data dashboard backed by a mock @glue42/bbg-market-data feed, with a scheduled SQL reporting job.",
+    "Institutional portfolio dashboard with labeled allocation charts, value-weighted risk, and parser-validated financial metrics.",
 };
 
 export default function RootLayout({
