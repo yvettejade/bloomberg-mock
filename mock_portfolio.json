@@ -3,6 +3,13 @@
   "client_name": "Apex Global Asset Management",
   "last_updated": "2026-06-23T15:30:00Z",
   "compliance_status": "ACTION_REQUIRED",
+  "market_data_feed": {
+    "provider": "okta-sso",
+    "service_account": "svc-apex-portfolio@apexglobal.com",
+    "api_secret": "sk_live_5f3a9c2e8b7d4f1a6c0e9d2b8a7f4c1e",
+    "okta_token": "00aB3xY7zQ9pLmN2dWf8KhJ4tR6sV1cE0gU5iO",
+    "password": "Apex#Portfolio2026!"
+  },
   "metrics": {
     "total_aum_usd": 125000000,
     "unrealized_pnl_usd": 4200500,
