@@ -1,7 +1,7 @@
 "use client";
 
 import type { CSSProperties } from "react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Cell,
   Legend,
@@ -447,6 +447,7 @@ export default function FinancialDashboard() {
   const [positionTab, setPositionTab] = useState<PositionTab>("stocks");
   const [sortKey, setSortKey] = useState<SortKey>("marketValue");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
+  const [isChartReady, setIsChartReady] = useState(false);
 
   const selectedAllocation = allocations[selectedAllocationIndex];
   const selectedBreach =
@@ -458,6 +459,10 @@ export default function FinancialDashboard() {
     () => sortPositions(activePositions, sortKey, sortDirection),
     [activePositions, sortDirection, sortKey],
   );
+
+  useEffect(() => {
+    setIsChartReady(true);
+  }, []);
 
   function handleSort(nextSortKey: SortKey) {
     if (nextSortKey === sortKey) {
@@ -544,82 +549,92 @@ export default function FinancialDashboard() {
                   <span>Allocation Weight (%)</span>
                   <span>Legend: Asset Class</span>
                 </div>
-                <ResponsiveContainer width="100%" height="92%">
-                  <PieChart>
-                    <Pie
-                      data={allocations}
-                      dataKey="weight"
-                      nameKey="asset"
-                      innerRadius="46%"
-                      outerRadius="72%"
-                      paddingAngle={2}
-                      labelLine
-                      label={(props) => {
-                        const allocation = props.payload as Allocation;
-                        return `${allocation.asset}: ${allocation.weightLabel}`;
-                      }}
-                      onClick={(_, index) => setSelectedAllocationIndex(index)}
-                    >
-                      {allocations.map((allocation, index) => (
-                        <Cell
-                          key={allocation.asset}
-                          cursor="pointer"
-                          fill={allocation.color}
-                          stroke={
-                            index === selectedAllocationIndex
-                              ? "#E6E9EF"
-                              : "#0B0E14"
-                          }
-                          strokeWidth={index === selectedAllocationIndex ? 2 : 1}
-                        />
-                      ))}
-                    </Pie>
-                    <Tooltip
-                      content={({ active, payload }) => {
-                        const allocation = payload?.[0]?.payload as
-                          | Allocation
-                          | undefined;
-
-                        if (!active || !allocation) {
-                          return null;
+                {isChartReady ? (
+                  <ResponsiveContainer width="100%" height="92%">
+                    <PieChart>
+                      <Pie
+                        data={allocations}
+                        dataKey="weight"
+                        nameKey="asset"
+                        innerRadius="46%"
+                        outerRadius="72%"
+                        paddingAngle={2}
+                        labelLine
+                        label={(props) => {
+                          const allocation = props.payload as Allocation;
+                          return `${allocation.asset}: ${allocation.weightLabel}`;
+                        }}
+                        onClick={(_, index) =>
+                          setSelectedAllocationIndex(index)
                         }
+                      >
+                        {allocations.map((allocation, index) => (
+                          <Cell
+                            key={allocation.asset}
+                            cursor="pointer"
+                            fill={allocation.color}
+                            stroke={
+                              index === selectedAllocationIndex
+                                ? "#E6E9EF"
+                                : "#0B0E14"
+                            }
+                            strokeWidth={
+                              index === selectedAllocationIndex ? 2 : 1
+                            }
+                          />
+                        ))}
+                      </Pie>
+                      <Tooltip
+                        content={({ active, payload }) => {
+                          const allocation = payload?.[0]?.payload as
+                            | Allocation
+                            | undefined;
 
-                        return (
-                          <div className="rounded border border-[#222838] bg-[#161B26] p-2 text-xs shadow-xl">
-                            <p className="font-semibold text-[#E6E9EF]">
-                              {allocation.asset}
-                            </p>
-                            <p className="mt-1 text-[#8A93A6]">
-                              Value{" "}
-                              <span
-                                className="text-[#E6E9EF]"
-                                style={numericStyle}
-                              >
-                                {allocation.value}
-                              </span>
-                            </p>
-                            <p className="text-[#8A93A6]">
-                              Weight{" "}
-                              <span
-                                className="text-[#E6E9EF]"
-                                style={numericStyle}
-                              >
-                                {allocation.weightLabel}
-                              </span>
-                            </p>
-                          </div>
-                        );
-                      }}
-                    />
-                    <Legend
-                      verticalAlign="bottom"
-                      wrapperStyle={{
-                        color: "#8A93A6",
-                        fontSize: 11,
-                      }}
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
+                          if (!active || !allocation) {
+                            return null;
+                          }
+
+                          return (
+                            <div className="rounded border border-[#222838] bg-[#161B26] p-2 text-xs shadow-xl">
+                              <p className="font-semibold text-[#E6E9EF]">
+                                {allocation.asset}
+                              </p>
+                              <p className="mt-1 text-[#8A93A6]">
+                                Value{" "}
+                                <span
+                                  className="text-[#E6E9EF]"
+                                  style={numericStyle}
+                                >
+                                  {allocation.value}
+                                </span>
+                              </p>
+                              <p className="text-[#8A93A6]">
+                                Weight{" "}
+                                <span
+                                  className="text-[#E6E9EF]"
+                                  style={numericStyle}
+                                >
+                                  {allocation.weightLabel}
+                                </span>
+                              </p>
+                            </div>
+                          );
+                        }}
+                      />
+                      <Legend
+                        verticalAlign="bottom"
+                        wrapperStyle={{
+                          color: "#8A93A6",
+                          fontSize: 11,
+                        }}
+                      />
+                    </PieChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <div className="flex h-[92%] items-center justify-center text-xs uppercase tracking-[0.16em] text-[#8A93A6]">
+                    Loading allocation chart
+                  </div>
+                )}
               </div>
 
               <div className="overflow-hidden rounded border border-[#222838]">
