@@ -2,15 +2,75 @@
   "portfolio_id": "PORT-9921-X",
   "client_name": "Apex Global Asset Management",
   "last_updated": "2026-06-23T15:30:00Z",
-  "compliance_status": "PASSING",
+  "compliance_status": "ACTION_REQUIRED",
   "metrics": {
     "total_aum_usd": 125000000,
     "unrealized_pnl_usd": 4200500,
     "cash_reserve_ratio": 0.08
   },
+  "pnl": {
+    "net_pnl_usd": 5180500,
+    "realized_pnl_usd": 980000,
+    "unrealized_pnl_usd": 4200500,
+    "daily_change_usd": -312750,
+    "daily_change_pct": -0.0061,
+    "mtd_pnl_usd": 2870300,
+    "ytd_pnl_usd": 11450900,
+    "by_asset": [
+      { "asset": "Equities", "net_pnl_usd": 3120000, "daily_change_usd": -210500 },
+      { "asset": "Fixed Income", "net_pnl_usd": 640500, "daily_change_usd": 18750 },
+      { "asset": "Crypto/Digital Assets", "net_pnl_usd": 1980000, "daily_change_usd": -145000 },
+      { "asset": "Real Estate", "net_pnl_usd": 215000, "daily_change_usd": 9500 },
+      { "asset": "Commodities", "net_pnl_usd": -775000, "daily_change_usd": 14500 }
+    ]
+  },
+  "compliance": {
+    "status": "ACTION_REQUIRED",
+    "open_breach_count": 2,
+    "warning_count": 1,
+    "last_scan": "2026-06-23T15:28:00Z",
+    "breaches": [
+      {
+        "id": "BRC-1042",
+        "rule": "Single-Asset Concentration Limit",
+        "severity": "CRITICAL",
+        "status": "OPEN",
+        "asset": "Crypto/Digital Assets",
+        "limit_pct": 0.1,
+        "current_pct": 0.12,
+        "detected_at": "2026-06-23T14:55:00Z",
+        "description": "Crypto/Digital Assets allocation of 12.0% exceeds the 10.0% mandate ceiling."
+      },
+      {
+        "id": "BRC-1043",
+        "rule": "Minimum Cash Reserve",
+        "severity": "HIGH",
+        "status": "OPEN",
+        "asset": "Cash",
+        "limit_pct": 0.1,
+        "current_pct": 0.08,
+        "detected_at": "2026-06-23T15:10:00Z",
+        "description": "Cash reserve ratio of 8.0% is below the required 10.0% liquidity floor."
+      },
+      {
+        "id": "BRC-1044",
+        "rule": "Portfolio Risk Score Ceiling",
+        "severity": "MEDIUM",
+        "status": "WARNING",
+        "asset": "Portfolio",
+        "limit_pct": null,
+        "current_pct": null,
+        "detected_at": "2026-06-23T15:12:00Z",
+        "description": "Value-weighted risk score is trending toward the 4.0 advisory threshold."
+      }
+    ]
+  },
   "allocations": [
-    { "asset": "Equities", "value_usd": 75000000, "risk_score": 4 },
-    { "asset": "Fixed Income", "value_usd": 35000000, "risk_score": 2 },
-    { "asset": "Crypto/Digital Assets", "value_usd": 15000000, "risk_score": 9 }
+    { "asset": "Equities", "value_usd": 60000000, "risk_score": 4, "target_pct": 0.5 },
+    { "asset": "Fixed Income", "value_usd": 35000000, "risk_score": 2, "target_pct": 0.28 },
+    { "asset": "Crypto/Digital Assets", "value_usd": 15000000, "risk_score": 9, "target_pct": 0.1 },
+    { "asset": "Real Estate", "value_usd": 8000000, "risk_score": 5, "target_pct": 0.07 },
+    { "asset": "Commodities", "value_usd": 4000000, "risk_score": 6, "target_pct": 0.03 },
+    { "asset": "Cash", "value_usd": 3000000, "risk_score": 1, "target_pct": 0.02 }
   ]
 }
