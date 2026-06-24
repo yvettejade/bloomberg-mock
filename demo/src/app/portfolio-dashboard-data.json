@@ -1,0 +1,32 @@
+{
+  "portfolio_id": "PORT-9921-X",
+  "client_name": "Apex Global Asset Management",
+  "last_updated": "2026-06-23T15:30:00Z",
+  "compliance_status": "PASSING",
+  "metrics": {
+    "total_aum": "$125,000,000.00",
+    "unrealized_pnl": "$4,200,500.00",
+    "cash_reserve_ratio": "8.00%"
+  },
+  "weighted_risk_score": 4.04,
+  "allocations": [
+    {
+      "asset": "Equities",
+      "value": "$75,000,000.00",
+      "weight_pct": "60.0%",
+      "risk_score": 4
+    },
+    {
+      "asset": "Fixed Income",
+      "value": "$35,000,000.00",
+      "weight_pct": "28.0%",
+      "risk_score": 2
+    },
+    {
+      "asset": "Crypto/Digital Assets",
+      "value": "$15,000,000.00",
+      "weight_pct": "12.0%",
+      "risk_score": 9
+    }
+  ]
+}
